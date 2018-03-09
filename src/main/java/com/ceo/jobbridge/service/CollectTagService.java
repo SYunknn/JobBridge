@@ -28,7 +28,7 @@ public class CollectTagService {
      * 添加
      * */
     @Transactional
-    void save(CollectTag collectTag){
+    public void addCollectTag(CollectTag collectTag){
         try {
             collectTagRepository.save(collectTag);
         } catch (Exception e) {
@@ -41,7 +41,7 @@ public class CollectTagService {
      * */
     @Transactional
     @Modifying
-    void deleteCollectTagByStudentId(Long studentId){
+    public void deleteCollectTagByStudentId(Long studentId){
         List<CollectTag> collectTagList = collectTagRepository.findByStudentId(studentId);
         for (CollectTag collectTag : collectTagList){
             collectTagRepository.delete(collectTag);
@@ -53,7 +53,7 @@ public class CollectTagService {
      * */
     @Transactional
     @Modifying
-    void deleteCollectTagById(Map<String, Object> map){
+    public void deleteCollectTagById(Map<String, Object> map){
         Long studentId = (Long)map.get("studentId");
         Integer tagId = (Integer)map.get("tagId");
 

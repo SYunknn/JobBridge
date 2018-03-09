@@ -1,18 +1,19 @@
 package com.ceo.jobbridge.controller;
 
-import com.jobBridge.model.Enterprise;
-import com.jobBridge.model.RecruitInfo;
-import com.jobBridge.model.RecruitInfoTag;
-import com.jobBridge.model.Tag;
-import com.jobBridge.service.EnterpriseService;
-import com.jobBridge.service.RecruitInfoService;
-import com.jobBridge.service.RecruitInfoTagService;
-import com.jobBridge.service.TagService;
-import com.jobBridge.util.ParseStringUtil;
-import com.jobBridge.util.RecruitInfoUtil;
-import com.jobBridge.util.SendInfo;
+import com.ceo.jobbridge.model.Enterprise;
+import com.ceo.jobbridge.model.RecruitInfo;
+import com.ceo.jobbridge.model.RecruitInfoTag;
+import com.ceo.jobbridge.model.Tag;
+import com.ceo.jobbridge.repository.EnterpriseRepository;
+import com.ceo.jobbridge.repository.RecruitInfoRepository;
+import com.ceo.jobbridge.repository.RecruitInfoTagRepository;
+import com.ceo.jobbridge.repository.TagRepository;
+import com.ceo.jobbridge.util.ParseStringUtil;
+import com.ceo.jobbridge.util.RecruitInfoUtil;
+import com.ceo.jobbridge.util.SendInfo;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,10 +32,17 @@ import java.util.Map;
 @Controller
 public class RecruitInfoController {
 
-    private com.jobBridge.Dao.RecruitInfoRepository recruitInfoService = new RecruitInfoService();
-    private com.jobBridge.Dao.EnterpriseRepository enterpriseService = new EnterpriseService();
-    private com.jobBridge.Dao.TagRepository tagService = new TagService();
-    private com.jobBridge.Dao.RecruitInfoTagRepository recruitInfoTagService = new RecruitInfoTagService();
+    @Autowired
+    private RecruitInfoTagRepository recruitInfoTagRepository;
+
+    @Autowired
+    private EnterpriseRepository enterpriseRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
+
+    @Autowired
+    private RecruitInfoRepository recruitInfoRepository;
 
     /**
      * 这里可以无登录访问
@@ -43,7 +51,7 @@ public class RecruitInfoController {
     @RequestMapping(value = "/recruitinfo",method = RequestMethod.GET)
     public String recruitInfo(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setHeader("Access-Control-Allow-Origin", "*");
-        return "/public/jobs.html";
+        return "jobs";
     }
 
     /**
@@ -56,21 +64,24 @@ public class RecruitInfoController {
 //        定义数据结构
         JSONObject json = new JSONObject();
         JSONArray dataJson = new JSONArray();
-        int recruitInfoNum = recruitInfoService.findNumOfRecruitInfo();
+        int recruitInfoNum = (int)recruitInfoRepository.count();
         if(recruitInfoNum == 0){
             json.put("numberofpage",0);
             json.put("data",dataJson);
             SendInfo.render(json.toString(),"text/json",response);
             return;
         }
-        Map<String,Object> map = new HashMap<>();
-        map.put("offset",0);
+        /*Map<String,Object> map = new HashMap<>();
+        map.put("offset",0);*/
+        int limit = 0;
         if(recruitInfoNum < 10){
-            map.put("limit",recruitInfoNum);
+//            map.put("limit",recruitInfoNum);
+            limit = recruitInfoNum;
         }else{
-            map.put("limit",10);
+//            map.put("limit",10);
+            limit = 10;
         }
-        List<RecruitInfo> recruitInfoList = recruitInfoService.findRecruitInfoOrderByTime(map);
+        List<RecruitInfo> recruitInfoList = recruitInfoRepository.findRecruitInfoOrderByTime(0, limit);
         if(recruitInfoList == null || recruitInfoList.isEmpty() || (recruitInfoList.size() == 1 && recruitInfoList.get(0) == null)){
             json.put("numberofpage",0);
             json.put("data",dataJson);
@@ -79,7 +90,7 @@ public class RecruitInfoController {
         }
 //        对这10个（可能少于10个）招聘信息进行处理
         for(RecruitInfo recruitInfo:recruitInfoList){
-            Enterprise enterprise = enterpriseService.findEnterpriseById(recruitInfo.getEnterpriseId());
+            Enterprise enterprise = enterpriseRepository.findByEnterpriseId(recruitInfo.getEnterpriseId());
             if(enterprise == null){
                 System.out.println("内部错误");
                 json.put("numberofpage",0);
@@ -138,23 +149,26 @@ public class RecruitInfoController {
         if(tags.length == 1 && tags[0].equals("不限")){
             if(locationList.length == 1 && locationList[0].equals("不限")){
 //                情况一：城市和行业都不限
-                recruitInfoNum = recruitInfoService.findNumOfRecruitInfo();
+                recruitInfoNum = (int)recruitInfoRepository.count();
                 if(recruitInfoNum != 0){
-                    Map<String,Object> map = new HashMap<>();
-                    map.put("offset",pageNum - 10);
+                   /* Map<String,Object> map = new HashMap<>();
+                    map.put("offset",pageNum - 10);*/
                     int limit = recruitInfoNum - pageNum + 10;
-                    if(limit < 10){
+                    /*if(limit < 10){
                         map.put("limit",limit);
                     }else{
                         map.put("limit",10);
+                    }*/
+                    if(limit >= 10){
+                        limit = 10;
                     }
-                    recruitInfoList = recruitInfoService.findRecruitInfoOrderByTime(map);
+                    recruitInfoList = recruitInfoRepository.findRecruitInfoOrderByTime(pageNum - 10, limit);
                 }
             }else{
 //                情况二：行业不限，限制城市
                 List<RecruitInfo> recruitInfoCityCondition = new ArrayList<>();
                 for(int i = 0;i<locationList.length;i++){
-                    List<RecruitInfo> tempRecruitInfoList = recruitInfoService.findRecruitInfoByLocation(locationList[i]);
+                    List<RecruitInfo> tempRecruitInfoList = recruitInfoRepository.findByLocation(locationList[i]);
                     if(tempRecruitInfoList == null || tempRecruitInfoList.isEmpty() ||
                             (tempRecruitInfoList.size() == 1 && tempRecruitInfoList.get(0) == null)){
 //                        这里不做处理
@@ -186,18 +200,18 @@ public class RecruitInfoController {
                 boolean flag = true;
                 List<RecruitInfo> recruitInfoCondition = new ArrayList<>();
                 for(int i = 0;i< tags.length;i++){
-                    Tag tag = tagService.findTagByName(tags[i]);
+                    Tag tag = tagRepository.findByName(tags[i]);
                     if(tag == null){
                         continue;
                     }
-                    List<RecruitInfoTag> recruitInfoTagList = recruitInfoTagService.findRecruitInfoTagByTagId(tag.getTagId());
+                    List<RecruitInfoTag> recruitInfoTagList = recruitInfoTagRepository.findByTagId(tag.getTagId());
                     if(!(recruitInfoTagList == null || recruitInfoTagList.isEmpty() ||
                             (recruitInfoTagList.size() == 1 && recruitInfoTagList.get(0) == null))){
 //                        还没有则加新的，有则在里面找还满足新条件的
                         if(recruitInfoCondition.isEmpty()){
                             for(RecruitInfoTag recruitInfoTag:recruitInfoTagList){
                                 if(recruitInfoTag != null){
-                                    RecruitInfo recruitInfo = recruitInfoService.findRecruitInfoById(recruitInfoTag.getRecruitInfoId());
+                                    RecruitInfo recruitInfo = recruitInfoRepository.findByRecruitInfoId(recruitInfoTag.getRecruitInfoId());
                                     if(recruitInfo != null){
                                         recruitInfoCondition.add(recruitInfo);
                                     }
@@ -247,7 +261,7 @@ public class RecruitInfoController {
 //                先限制城市
                 List<RecruitInfo> recruitInfoCityCondition = new ArrayList<>();
                 for(int i = 0;i<locationList.length;i++){
-                    List<RecruitInfo> tempRecruitInfoList = recruitInfoService.findRecruitInfoByLocation(locationList[i]);
+                    List<RecruitInfo> tempRecruitInfoList = recruitInfoRepository.findByLocation(locationList[i]);
                     if(!(tempRecruitInfoList == null || tempRecruitInfoList.isEmpty() ||
                             (tempRecruitInfoList.size() == 1 && tempRecruitInfoList.get(0) == null))){
                         for(RecruitInfo recruitInfo:tempRecruitInfoList){
@@ -261,20 +275,20 @@ public class RecruitInfoController {
                 boolean flag = true;
                 boolean anyTag = false;
                 for(int i = 0;i< tags.length;i++){
-                    Tag tag = tagService.findTagByName(tags[i]);
+                    Tag tag = tagRepository.findByName(tags[i]);
                     if(tag == null){
                         continue;
                     }else{
                         anyTag = true;
                     }
-                    List<RecruitInfoTag> recruitInfoTagList = recruitInfoTagService.findRecruitInfoTagByTagId(tag.getTagId());
+                    List<RecruitInfoTag> recruitInfoTagList = recruitInfoTagRepository.findByTagId(tag.getTagId());
                     if(!(recruitInfoTagList == null || recruitInfoTagList.isEmpty() ||
                             (recruitInfoTagList.size() == 1 && recruitInfoTagList.get(0) == null))){
 //                        还没有则加新的，有则在里面找还满足新条件的
                         if(recruitInfoCityCondition.isEmpty() && i != 0){
                             for(RecruitInfoTag recruitInfoTag:recruitInfoTagList){
                                 if(recruitInfoTag != null){
-                                    RecruitInfo recruitInfo = recruitInfoService.findRecruitInfoById(recruitInfoTag.getRecruitInfoId());
+                                    RecruitInfo recruitInfo = recruitInfoRepository.findByRecruitInfoId(recruitInfoTag.getRecruitInfoId());
                                     if(recruitInfo != null){
                                         recruitInfoCityCondition.add(recruitInfo);
                                     }
@@ -332,7 +346,7 @@ public class RecruitInfoController {
         if(!recruitInfoList.isEmpty()){
             List<RecruitInfo> resultList = RecruitInfoUtil.orderByTime(recruitInfoList);
             for(RecruitInfo recruitInfo:resultList){
-                Enterprise enterprise = enterpriseService.findEnterpriseById(recruitInfo.getEnterpriseId());
+                Enterprise enterprise = enterpriseRepository.findByEnterpriseId(recruitInfo.getEnterpriseId());
                 if(enterprise == null){
                     System.out.println("内部错误:找不到公司");
                     return;

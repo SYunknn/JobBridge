@@ -15,6 +15,10 @@ public class Manager {
     private String userName;    //管理员用户名
     private String password;    //管理员密码
 
+    public Manager(){
+
+    }
+
     public Manager(Integer managerId, String userName, String password) {
         this.managerId = managerId;
         this.userName = userName;

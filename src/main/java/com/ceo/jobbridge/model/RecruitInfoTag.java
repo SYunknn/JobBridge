@@ -12,30 +12,35 @@ import javax.persistence.Table;
  */
 
 @Entity
-@Table(name = "collect_enterprise")
+@Table(name = "recruit_info_tag")
 @IdClass(RecruitInfoTagMultiKeysClass.class)
 public class RecruitInfoTag {
     private Long recruitInfoId;
     private Integer tagId;
+
+    public RecruitInfoTag(){
+
+    }
 
     public RecruitInfoTag(Long recruitInfoId, Integer tagId) {
         this.recruitInfoId = recruitInfoId;
         this.tagId = tagId;
     }
 
+    @Id
     public Long getRecruitInfoId() {
         return recruitInfoId;
     }
+
+    @Id
     public Integer getTagId() {
         return tagId;
     }
 
-    @Id
     public void setRecruitInfoId(Long recruitInfoId) {
         this.recruitInfoId = recruitInfoId;
     }
 
-    @Id
     public void setTagId(Integer tagId) {
         this.tagId = tagId;
     }

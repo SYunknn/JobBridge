@@ -29,7 +29,7 @@ public class RecruitInfoService {
      * */
     @Transactional
     @Modifying
-    void updateHaveDeleteById(Long recruitInfoId){
+    public void updateHaveDeleteById(Long recruitInfoId){
         RecruitInfo recruitInfo = recruitInfoRepository.findByRecruitInfoId(recruitInfoId);
         if(recruitInfo == null){
             System.out.println("没找到需要更新的RecruitInfo");
@@ -44,7 +44,7 @@ public class RecruitInfoService {
      * 添加
      * */
     @Transactional
-    void save(RecruitInfo recruitInfo){
+    public void addRecruitInfo(RecruitInfo recruitInfo){
         try {
             recruitInfoRepository.save(recruitInfo);
         } catch (Exception e) {
@@ -58,7 +58,7 @@ public class RecruitInfoService {
      * */
     @Transactional
     @Modifying
-    void updateRecruitInfoById(Map<String,Object> map){
+    public void updateRecruitInfoById(Map<String,Object> map){
 
         Long recruitInfoId = (Long)map.get("recruitInfoId");
         String jobName = (String)map.get("jobName");
@@ -91,7 +91,7 @@ public class RecruitInfoService {
      * */
     @Transactional
     @Modifying
-    void deleteRecruitInfoById(Long recruitInfoId){
+    public void deleteRecruitInfoById(Long recruitInfoId){
         RecruitInfo recruitInfo = recruitInfoRepository.findByRecruitInfoId(recruitInfoId);
         if(recruitInfo == null){
             System.out.println("要删除的RecruitInfo不存在");

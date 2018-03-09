@@ -24,7 +24,7 @@ public interface DeliverRepository extends JpaRepository<Deliver, Long>{
     Deliver findByDeliverId(Long deliverId);
 
     //根据简历号查询投递信息
-    List<Deliver> findDeliverByResumeId(Long resumeId);
+    List<Deliver> findByResumeId(Long resumeId);
 
     //根据投递号修改字段
     //void updateHaveDeleteByDeliverId(Long deliverId);

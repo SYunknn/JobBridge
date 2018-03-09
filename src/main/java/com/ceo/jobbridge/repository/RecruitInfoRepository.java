@@ -17,7 +17,8 @@ public interface RecruitInfoRepository extends JpaRepository<RecruitInfo,Long> {
     List<RecruitInfo> findByEnterpriseId(Long enterpriseId);
 
     // RecruitInfo findLastRecruitInfoByEnterpriseId(Long enterpriseId);
-    @Query("select r_i from recruit_info r_i where r_i.enterprise_id = :enterpriseId and r_i.date_time >= all(select ri.date_time from recruit_info ri where ri.enterprise_id = :enterpriseId)")
+    //@Query("select r_i from recruit_info r_i where r_i.enterprise_id = :enterpriseId and r_i.date_time >= all(select ri.date_time from recruit_info ri where ri.enterprise_id = :enterpriseId)")
+    @Query(value = "select * from recruit_info where enterprise_id = :enterpriseId and date_time >= all( select date_time from recruit_info where enterprise_id = :enterpriseId )", nativeQuery = true)
     RecruitInfo findLastRecruitInfoByEnterpriseId(@Param("enterpriseId") Long enterpriseId);
 
     List<RecruitInfo> findByLocation(String location);

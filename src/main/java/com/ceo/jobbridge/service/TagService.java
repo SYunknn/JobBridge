@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 /**
  * Created by Administrator on 2017/7/24 0024.
  */
+
 @Service
 public class TagService {
 
@@ -17,7 +18,7 @@ public class TagService {
     private TagRepository tagRepository;
 
     @Transactional
-    void addTag(Tag tag){
+    public void addTag(Tag tag){
         try {
             tagRepository.save(tag);
         } catch (Exception e) {

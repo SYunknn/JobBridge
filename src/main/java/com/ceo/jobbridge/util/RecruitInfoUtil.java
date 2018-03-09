@@ -1,6 +1,8 @@
 package com.ceo.jobbridge.util;
 
-import com.jobBridge.model.RecruitInfo;
+
+
+import com.ceo.jobbridge.model.RecruitInfo;
 
 import java.util.List;
 

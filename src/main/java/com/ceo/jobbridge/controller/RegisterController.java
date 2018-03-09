@@ -1,15 +1,17 @@
 package com.ceo.jobbridge.controller;
 
-import com.jobBridge.Dao.IResumeDao;
-import com.jobBridge.Dao.IStudentDao;
-import com.jobBridge.model.Enterprise;
-import com.jobBridge.model.Manager;
-import com.jobBridge.service.EnterpriseService;
-import com.jobBridge.service.ManagerService;
-import com.jobBridge.service.ResumeService;
-import com.jobBridge.service.StudentService;
-import com.jobBridge.model.Student;
-import com.jobBridge.util.Crypto;
+import com.ceo.jobbridge.model.Enterprise;
+import com.ceo.jobbridge.model.Manager;
+import com.ceo.jobbridge.model.Student;
+import com.ceo.jobbridge.repository.EnterpriseRepository;
+import com.ceo.jobbridge.repository.ManagerRepository;
+import com.ceo.jobbridge.repository.ResumeRepository;
+import com.ceo.jobbridge.repository.StudentRepository;
+import com.ceo.jobbridge.service.EnterpriseService;
+import com.ceo.jobbridge.service.ManagerService;
+import com.ceo.jobbridge.service.StudentService;
+import com.ceo.jobbridge.util.Crypto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,10 +26,26 @@ import java.io.PrintWriter;
 @Controller
 public class RegisterController {
 
-    private IStudentDao studentService = new StudentService();
-    private com.jobBridge.Dao.ManagerRepository managerService = new ManagerService();
-    private com.jobBridge.Dao.EnterpriseRepository enterpriseService = new EnterpriseService();
-    private IResumeDao resumeService = new ResumeService();
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private ManagerRepository managerRepository;
+
+    @Autowired
+    private EnterpriseRepository enterpriseRepository;
+
+    @Autowired
+    private ResumeRepository resumeRepository;
+
+    @Autowired
+    private StudentService studentService;
+
+    @Autowired
+    private ManagerService managerService;
+
+    @Autowired
+    private EnterpriseService enterpriseService;
 
     /**
     * 请求学生注册页面
@@ -35,7 +53,7 @@ public class RegisterController {
     @RequestMapping(value = "/forRegister",method = RequestMethod.GET)
     public String forRegister(HttpServletResponse response) {
         response.setHeader("Access-Control-Allow-Origin", "*");
-        return "/public/sturegister.html";
+        return "sturegister";
     }
 
     /**
@@ -49,9 +67,9 @@ public class RegisterController {
         String mailbox = request.getParameter("email");
         String password = request.getParameter("passWord");
         Student student = null;
-        if((student = studentService.findStudentByUserName(userName)) != null){
+        if((student = studentRepository.findByUserName(userName)) != null){
             result = "{\"ok\":\"false\",\"reason\":\"该用户名已被其他人注册\"}";
-        }else if((student = studentService.findStudentByMailbox(mailbox)) != null){
+        }else if((student = studentRepository.findByMailbox(mailbox)) != null){
             result = "{\"ok\":\"false\",\"reason\":\"该邮箱已被其他人注册\"}";
         }else{
             String cryptoPassword = Crypto.getEncryptedPwd(password);
@@ -81,7 +99,7 @@ public class RegisterController {
         String userName = request.getParameter("userName");
         String password = request.getParameter("passWord");
         Manager manager = null;
-        if((manager = managerService.findManagerByUserName(userName)) != null){
+        if((manager = managerRepository.findByUserName(userName)) != null){
             result = "{\"ok\":\"false\",\"reason\":\"该用户名已被其他人注册\"}";
         }else{
             String cryptoPassword = Crypto.getEncryptedPwd(password);
@@ -110,9 +128,9 @@ public class RegisterController {
         String password = request.getParameter("password");
         String enterpriseIntroduction = request.getParameter("enterpriseIntroduction");
         Enterprise enterprise = null;
-        if((enterprise = enterpriseService.findEnterpriseByUserName(userName)) != null){
+        if((enterprise = enterpriseRepository.findByUserName(userName)) != null){
             result = "{\"ok\":\"false\",\"reason\":\"该用户名已被其他人注册\"}";
-        }else if((enterprise = enterpriseService.findEnterpriseByMailbox(mailbox)) != null){
+        }else if((enterprise = enterpriseRepository.findByMailbox(mailbox)) != null){
             result = "{\"ok\":\"false\",\"reason\":\"该邮箱已被其他人注册\"}";
         }else{
             String cryptoPassword = Crypto.getEncryptedPwd(password);

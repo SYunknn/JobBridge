@@ -22,6 +22,10 @@ public class StudentDetail {
     private String intentionFunction;
     private Boolean validation;
 
+    public StudentDetail(){
+
+    }
+
     public StudentDetail(Long studentId, String studentMailbox, String phoneNum, String universityName, String major, String grade,
                          String intentionCity, String intentionIndustry, String intentionFunction, Boolean validation) {
         this.studentId = studentId;

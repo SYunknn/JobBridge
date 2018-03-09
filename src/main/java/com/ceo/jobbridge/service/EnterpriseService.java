@@ -21,7 +21,7 @@ public class EnterpriseService {
      * 添加
      * */
     @Transactional
-    void save(Enterprise enterprise){
+    public void addEnterprise(Enterprise enterprise){
         try {
             enterpriseRepository.save(enterprise);
         } catch (Exception e) {

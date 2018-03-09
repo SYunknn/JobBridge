@@ -22,7 +22,7 @@ public class StudentDetailService {
      * 添加学生详细信息
      * */
     @Transactional
-    void addStudentDetail(StudentDetail studentDetail){
+    public void addStudentDetail(StudentDetail studentDetail){
         try {
             studentDetailRepository.save(studentDetail);
         } catch (Exception e) {
@@ -35,7 +35,7 @@ public class StudentDetailService {
      * */
     @Transactional
     @Modifying
-    void deleteByStudentId(Long studentId){
+    public void deleteByStudentId(Long studentId){
         StudentDetail studentDetail = studentDetailRepository.findByStudentId(studentId);
         if(studentDetail != null){
             studentDetailRepository.delete(studentDetail);
@@ -47,7 +47,7 @@ public class StudentDetailService {
      * */
     @Transactional
     @Modifying
-    void updateStudentDetailValidationByStudentId(Long studentId){
+    public void updateStudentDetailValidationByStudentId(Long studentId){
         StudentDetail studentDetail = studentDetailRepository.findByStudentId(studentId);
         if(studentDetail == null){
             System.out.println("该学生不存在");

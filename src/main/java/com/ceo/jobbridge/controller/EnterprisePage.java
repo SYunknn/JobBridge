@@ -1,7 +1,7 @@
 package com.ceo.jobbridge.controller;
 
 import com.ceo.jobbridge.model.*;
-import com.ceo.jobbridge.repository.CollectEnterpriseRepository;
+import com.ceo.jobbridge.repository.*;
 import com.ceo.jobbridge.service.*;
 import com.ceo.jobbridge.util.ParseStringUtil;
 import com.ceo.jobbridge.util.SendInfo;
@@ -27,15 +27,34 @@ import java.util.Map;
 public class EnterprisePage {
 
     @Autowired
-    private CollectEnterpriseRepository collectEnterpriseRepository;
+    private DeliverRepository deliverRepository;
 
-//    private IDeliverDao deliverService = new DeliverService();
-//    private ITagDao tagService = new TagService();
-//    private IRecruitInfoTagDao recruitInfoTagService = new RecruitInfoTagService();
-//    private IResumeDao resumeService = new ResumeService();
-//    private IStudentDao studentService = new StudentService();
-//    private IResumeDetailDao resumeDetailService = new ResumeDetailService();
+    @Autowired
+    private TagRepository tagRepository;
 
+    @Autowired
+    private RecruitInfoRepository recruitInfoRepository;
+
+    @Autowired
+    private ResumeRepository resumeRepository;
+
+    @Autowired
+    private RecruitInfoTagRepository recruitInfoTagRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private RecruitInfoService recruitInfoService;
+
+    @Autowired
+    private DeliverService deliverService;
+
+    @Autowired
+    private TagService tagService;
+
+    @Autowired
+    private RecruitInfoTagService recruitInfoTagService;
 
     /**
     * 公司企业退出操作
@@ -48,7 +67,7 @@ public class EnterprisePage {
             response.sendRedirect("/");
         }
         request.getSession().removeAttribute("loginUser");
-        return "/public/index.html";
+        return "index";
     }
 
     /**
@@ -61,7 +80,7 @@ public class EnterprisePage {
         if(loginUser == null || !(loginUser instanceof Enterprise)){
             response.sendRedirect("/");
         }
-        return "/public/compubjob.html";
+        return "compubjob";
     }
 
     /**
@@ -74,7 +93,7 @@ public class EnterprisePage {
         if(loginUser == null || !(loginUser instanceof Enterprise)){
             response.sendRedirect("/");
         }
-        return "/public/cominfo.html";
+        return "cominfo";
     }
 
     /**
@@ -87,7 +106,7 @@ public class EnterprisePage {
         if(loginUser == null || !(loginUser instanceof Enterprise)){
             response.sendRedirect("/");
         }
-        return "/public/compubedjob.html";
+        return "compubedjob";
     }
 
     /**
@@ -100,7 +119,7 @@ public class EnterprisePage {
         if(loginUser == null || !(loginUser instanceof Enterprise)){
             response.sendRedirect("/");
         }
-        return "/public/commessage.html";
+        return "commessage";
     }
 
     /**
@@ -119,7 +138,7 @@ public class EnterprisePage {
         JSONObject json = new JSONObject();
         JSONArray dataJson = new JSONArray();
 //        根据公司号查询所有招聘信息
-        List<RecruitInfo> recruitInfoList = recruitInfoService.findRecruitInfoByEnterpriseId(enterprise.getEnterpriseId());
+        List<RecruitInfo> recruitInfoList = recruitInfoRepository.findByEnterpriseId(enterprise.getEnterpriseId());
 //        如果没有招聘信息，则返回空数据
         if(recruitInfoList == null || recruitInfoList.isEmpty() ||
                 (recruitInfoList.size() == 1 && recruitInfoList.get(0) == null)){
@@ -155,7 +174,7 @@ public class EnterprisePage {
         }
         Enterprise enterprise = (Enterprise)loginUser;
         String recruitInfoId = request.getParameter("id");
-        RecruitInfo recruitInfo = recruitInfoService.findRecruitInfoById(Long.parseLong(recruitInfoId));
+        RecruitInfo recruitInfo = recruitInfoRepository.findByRecruitInfoId(Long.parseLong(recruitInfoId));
         String result;
         if(!enterprise.getEnterpriseId().equals(recruitInfo.getEnterpriseId())){
             result = "{\"ok\":\"false\",\"reason\":\"非法删除其他公司招聘信息\"}";
@@ -179,7 +198,7 @@ public class EnterprisePage {
         }
         Enterprise enterprise = (Enterprise)loginUser;
         String deliveryId = request.getParameter("id");
-        Deliver deliver = deliverService.findDeliverById(Long.parseLong(deliveryId));
+        Deliver deliver = deliverRepository.findByDeliverId(Long.parseLong(deliveryId));
         String result;
         if(!enterprise.getEnterpriseId().equals(deliver.getEnterpriseId())){
             result = "{\"ok\":\"false\",\"reason\":\"非法删除其他公司收到的信息\"}";
@@ -222,7 +241,7 @@ public class EnterprisePage {
             RecruitInfo recruitInfo = new RecruitInfo(Long.parseLong("0"),enterprise.getEnterpriseId(),jobName,jobDescribe,jobRequire,location,
                     Integer.parseInt(lowSalary),Integer.parseInt(highSalary),dateTime,deadline,false);
             recruitInfoService.addRecruitInfo(recruitInfo);
-            RecruitInfo justRecruitInfo = recruitInfoService.findLastRecruitInfoByEnterpriseId(enterprise.getEnterpriseId());
+            RecruitInfo justRecruitInfo = recruitInfoRepository.findLastRecruitInfoByEnterpriseId(enterprise.getEnterpriseId());
             if (justRecruitInfo == null) {
                 System.out.println("内部错误");
                 return;
@@ -230,13 +249,13 @@ public class EnterprisePage {
 //            1.2 处理标签问题
             for(int i = 0;i<tags.length;i++){
 //                1.2.1 先看数据库里面有没有这个标签，没有则加进去
-                Tag existTag = tagService.findTagByName(tags[i]);
+                Tag existTag = tagRepository.findByName(tags[i]);
                 if(existTag == null){
                     Tag tag = new Tag(0,tags[i]);
                     tagService.addTag(tag);
                 }
 //                1.2.2 找到这个标签
-                Tag justTag = tagService.findTagByName(tags[i]);
+                Tag justTag = tagRepository.findByName(tags[i]);
                 if(justTag == null){
                     return;
                 }
@@ -249,7 +268,7 @@ public class EnterprisePage {
 //            2.如果是修改招聘信息
         }else{
             String result = null;
-            RecruitInfo recruitInfo = recruitInfoService.findRecruitInfoById(Long.parseLong(recruitInfoId));
+            RecruitInfo recruitInfo = recruitInfoRepository.findByRecruitInfoId(Long.parseLong(recruitInfoId));
             if(recruitInfo == null){
                 result = "{\"ok\":\"false\",\"reason\":\"你要修改的招聘信息不存在\"}";
                 SendInfo.render(result,"text/json",response);
@@ -275,12 +294,12 @@ public class EnterprisePage {
 //            2.3 对每个tag,添加新的tag所属
             for(int i = 0;i<tags.length;i++){
 //                2.2.1 找到这个标签
-                Tag existTag = tagService.findTagByName(tags[i]);
+                Tag existTag = tagRepository.findByName(tags[i]);
                 if(existTag == null){
                     Tag tag = new Tag(0,tags[i]);
                     tagService.addTag(tag);
                 }
-                Tag justTag = tagService.findTagByName(tags[i]);
+                Tag justTag = tagRepository.findByName(tags[i]);
                 if(justTag == null){
                     System.out.println("内部错误");
                     return;
@@ -332,8 +351,8 @@ public class EnterprisePage {
         JSONObject json = new JSONObject();
         JSONArray dataJsonArray = new JSONArray();
 //        根据公司号查询所有招聘信息
-        List<Deliver> deliverList = deliverService
-                .findDeliverByEnterpriseId(enterprise.getEnterpriseId());
+        List<Deliver> deliverList = deliverRepository
+                .findByEnterpriseId(enterprise.getEnterpriseId());
         //空值判定
         if (deliverList == null || deliverList.isEmpty() ||
                 (deliverList.size() == 1 && deliverList.get(0) == null)){
@@ -350,14 +369,14 @@ public class EnterprisePage {
                     //deliverytime
                     dataJson.put("deliverytime",tempDeliver.getDateTime());
                     //jobtitle
-                    RecruitInfo recruitInfo = recruitInfoService
-                            .findRecruitInfoById(tempDeliver.getRecruitInfoId());
+                    RecruitInfo recruitInfo = recruitInfoRepository
+                            .findByRecruitInfoId(tempDeliver.getRecruitInfoId());
                     dataJson.put("jobtitle",recruitInfo.getJobName());
                     //username
-                    Resume resume = resumeService
-                            .findResumeByResumeId(tempDeliver.getResumeId());
-                    Student student = studentService
-                            .findStudentByStudentId(resume.getStudentId());
+                    Resume resume = resumeRepository
+                            .findByResumeId(tempDeliver.getResumeId());
+                    Student student = studentRepository
+                            .findByStudentId(resume.getStudentId());
                     dataJson.put("username",student.getUserName());
                     //status
                     if(tempDeliver.getHaveRead()){
@@ -395,7 +414,7 @@ public class EnterprisePage {
 //        定义数据结构
         JSONObject json = new JSONObject();
 //        根据招聘信息号查询招聘信息
-        RecruitInfo recruitInfo = recruitInfoService.findRecruitInfoById(Long.parseLong(recruitInfoId));
+        RecruitInfo recruitInfo = recruitInfoRepository.findByRecruitInfoId(Long.parseLong(recruitInfoId));
         if(recruitInfo == null){
             SendInfo.render(json.toString(),"text/json",response);
             return;
@@ -409,14 +428,14 @@ public class EnterprisePage {
         json.put("jobDescribe",recruitInfo.getJobDescribe());
         json.put("jobRequire",recruitInfo.getJobRequire());
 //        查询招聘信息对应的标签
-        List<RecruitInfoTag> recruitInfoTagList = recruitInfoTagService.findRecruitInfoTagByRecruitInfoId(Long.parseLong(recruitInfoId));
+        List<RecruitInfoTag> recruitInfoTagList = recruitInfoTagRepository.findByRecruitInfoId(Long.parseLong(recruitInfoId));
         if(recruitInfoTagList == null || recruitInfoTagList.isEmpty() || (recruitInfoTagList.size() == 1 && recruitInfoTagList.get(0) == null)){
             json.put("industry","[]");
         }else{
             String[] industry = new String[recruitInfoTagList.size()];
 //            对于每一个标签号，查询对应的标签名
             for(int i = 0;i<recruitInfoTagList.size();i++){
-                Tag tag = tagService.findTagByTagId(recruitInfoTagList.get(i).getTagId());
+                Tag tag = tagRepository.findByTagId(recruitInfoTagList.get(i).getTagId());
                 if(tag != null){
                     industry[i] = tag.getName();
                 }
@@ -427,7 +446,7 @@ public class EnterprisePage {
     }
 
     /**
-     * 公司请求投递信息对应得简历信息
+     * 公司请求投递信息对应的简历信息
      */
     @RequestMapping(value = "/enterprise/showreview",method = RequestMethod.POST)
     public void enterpriseShowResume(HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -444,11 +463,14 @@ public class EnterprisePage {
             System.out.println("deliverIdStr is null");
         }
         Long deliverId = Long.parseLong(deliverIdStr);
-        Deliver deliver = deliverService.findDeliverById(deliverId);
+        Deliver deliver = deliverRepository.findByDeliverId(deliverId);
         System.out.println(deliver);
         Long resumeId = deliver.getResumeId();
+//        查找简历
+        Resume resume = resumeRepository.findByResumeId(resumeId);
+        SendInfo.render(resume.getResumeContent(),"text/json",response);
 
-        //定义大的变量
+        /*//定义大的变量
         JSONObject json = new JSONObject();
         JSONArray edusJsonArray = new JSONArray();
         JSONArray worksJsonArray = new JSONArray();
@@ -582,10 +604,7 @@ public class EnterprisePage {
         json.put("leader",leaderJson);
         json.put("skill",skillJson);
 
-        System.out.println(json);
-
-        SendInfo.render(json.toString(),"text/json",response);
-
+        System.out.println(json);*/
 
     }
 

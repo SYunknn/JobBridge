@@ -17,7 +17,7 @@ public class ManagerService{
     private ManagerRepository managerRepository;
 
     @Transactional
-    void save(Manager manager){
+    public void addManager(Manager manager){
         try {
             managerRepository.save(manager);
         } catch (Exception e) {

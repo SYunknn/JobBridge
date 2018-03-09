@@ -1,13 +1,14 @@
 package com.ceo.jobbridge.controller;
 
-import com.jobBridge.model.Manager;
-import com.jobBridge.service.EnterpriseService;
-import com.jobBridge.Dao.IStudentDao;
-import com.jobBridge.service.ManagerService;
-import com.jobBridge.service.StudentService;
-import com.jobBridge.model.Enterprise;
-import com.jobBridge.model.Student;
-import com.jobBridge.util.Crypto;
+import com.ceo.jobbridge.model.Enterprise;
+import com.ceo.jobbridge.model.Manager;
+import com.ceo.jobbridge.model.Student;
+import com.ceo.jobbridge.repository.EnterpriseRepository;
+import com.ceo.jobbridge.repository.ManagerRepository;
+import com.ceo.jobbridge.repository.StudentRepository;
+import com.ceo.jobbridge.service.StudentService;
+import com.ceo.jobbridge.util.Crypto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,16 +25,24 @@ import java.util.Map;
 @Controller
 public class LoginController {
 
-    private IStudentDao studentService = new StudentService();
-    private com.jobBridge.Dao.EnterpriseRepository enterpriseService = new EnterpriseService();
-    private com.jobBridge.Dao.ManagerRepository managerService = new ManagerService();
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private EnterpriseRepository enterpriseRepository;
+
+    @Autowired
+    private ManagerRepository managerRepository;
+
+    @Autowired
+    private StudentService studentService;
 
     @RequestMapping(value = "/forLogin/com",method = RequestMethod.GET)
     public String comForLogin(HttpServletRequest request, HttpServletResponse response) {
         response.setHeader("Access-Control-Allow-Origin", "*");
         String timestamp = Long.toString(System.currentTimeMillis());
         request.getSession().setAttribute("timestamp",timestamp);
-        return "/public/comlogin.html";
+        return "comlogin";
     }
 
     @RequestMapping(value = "/forLogin/stu",method = RequestMethod.GET)
@@ -41,7 +50,7 @@ public class LoginController {
         response.setHeader("Access-Control-Allow-Origin", "*");
         String timestamp = Long.toString(System.currentTimeMillis());
         request.getSession().setAttribute("timestamp",timestamp);
-        return "/public/stulogin.html";
+        return "stulogin";
     }
 
     @RequestMapping(value = "/forLogin/admin",method = RequestMethod.GET)
@@ -49,7 +58,7 @@ public class LoginController {
         response.setHeader("Access-Control-Allow-Origin", "*");
         String timestamp = Long.toString(System.currentTimeMillis());
         request.getSession().setAttribute("timestamp",timestamp);
-        return "/public/admlogin.html";
+        return "admlogin";
     }
 
     /**
@@ -66,9 +75,9 @@ public class LoginController {
         System.out.println("这里是学生在登录");
         Student student = null;
         if(loginName.contains("@")){
-            student = studentService.findStudentByMailbox(loginName);
+            student = studentRepository.findByMailbox(loginName);
         }else{
-            student = studentService.findStudentByUserName(loginName);
+            student = studentRepository.findByUserName(loginName);
         }
         if(student == null){
             result = "{\"ok\":\"false\",\"reason\":\"用户不存在或密码错误\"}";     //用户不存在
@@ -97,9 +106,9 @@ public class LoginController {
         System.out.println("这里是公司在登录");
         Enterprise enterprise = null;
         if(loginName.contains("@")){
-            enterprise = enterpriseService.findEnterpriseByMailbox(loginName);
+            enterprise = enterpriseRepository.findByMailbox(loginName);
         }else{
-            enterprise = enterpriseService.findEnterpriseByUserName(loginName);
+            enterprise = enterpriseRepository.findByUserName(loginName);
         }
         if(enterprise == null){
             result = "{\"ok\":\"false\",\"reason\":\"用户不存在或密码错误\"}";     //用户不存在
@@ -127,11 +136,7 @@ public class LoginController {
         String password = request.getParameter("passWord");
         System.out.println("这里是管理员在登录");
         Manager manager = null;
-        if(loginName.contains("@")){
-            manager = managerService.findManagerByUserName(loginName);
-        }else{
-            manager = managerService.findManagerByUserName(loginName);
-        }
+        manager = managerRepository.findByUserName(loginName);
         if(manager == null){
             result = "{\"ok\":\"false\",\"reason\":\"用户不存在或密码错误\"}";     //用户不存在
         }else if(!Crypto.validPassword(password,manager.getPassword())){

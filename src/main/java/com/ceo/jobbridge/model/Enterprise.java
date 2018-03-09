@@ -21,6 +21,10 @@ public class Enterprise {
     private String enterpriseIntroduction;
     private String iconAddress;
 
+    public Enterprise(){
+
+    }
+
     public Enterprise(Long enterpriseId, String userName, String name, String mailbox, String phoneNum,
                       String password, String enterpriseIntroduction, String iconAddress) {
         this.enterpriseId = enterpriseId;

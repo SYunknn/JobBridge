@@ -22,7 +22,7 @@ public class StudentService {
      * 新增注册的学生账号
      * */
     @Transactional
-    void addStudent(Student student){
+    public void addStudent(Student student){
         try {
             studentRepository.save(student);
         } catch (Exception e) {

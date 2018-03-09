@@ -1,12 +1,50 @@
 package com.ceo.jobbridge.service;
 
+import com.ceo.jobbridge.model.Resume;
+import com.ceo.jobbridge.repository.ResumeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.io.Reader;
 
 /**
  * Created by SYunk on 2017/7/21.
  */
+
+@Service
 public class ResumeService {
+
+    @Autowired
+    private ResumeRepository resumeRepository;
+
+    /**
+     * 添加简历
+     * */
+    @Transactional
+    public void addResume(Resume resume){
+        try {
+            resumeRepository.save(resume);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+    }
+
+    /**
+     * 修改简历
+     * */
+    @Transactional
+    @Modifying
+    public void updateResume(Resume resume){
+        Resume oldResume = resumeRepository.findByResumeId(resume.getResumeId());
+        if(oldResume == null){
+            System.out.println("要修改的简历不存在");
+        }else{
+            resumeRepository.save(resume);
+        }
+    }
 
 /*    private SqlSessionFactory sessionFactory;
     private SqlSession session;

@@ -20,7 +20,7 @@ public class InformInterviewService {
      * 添加
      * */
     @Transactional
-    void add(InformInterview informInterview){
+    public void add(InformInterview informInterview){
         try {
             informInterviewRepository.save(informInterview);
         } catch (Exception e) {
@@ -33,7 +33,7 @@ public class InformInterviewService {
      * */
     @Transactional
     @Modifying
-    void deleteInterviewById(Long informInterviewId){
+    public void deleteInterviewById(Long informInterviewId){
         try {
             InformInterview informInterview =
                     informInterviewRepository.findByInformInterviewId(informInterviewId);

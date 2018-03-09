@@ -22,6 +22,10 @@ public class Deliver {
     private Boolean haveRead;
     private Boolean haveDelete;
 
+    public Deliver(){
+
+    }
+
     public Deliver(Long deliverId, Long resumeId, Long enterpriseId, Long recruitInfoId, Timestamp dateTime, Boolean haveRead, Boolean haveDelete) {
         this.deliverId = deliverId;
         this.resumeId = resumeId;

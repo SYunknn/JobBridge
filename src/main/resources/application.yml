@@ -1,13 +1,16 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/jobbridge
+    url: jdbc:mysql://127.0.0.1:3306/jobbridge2
     username: root
-    password: 123456
+    password: asd79461305
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+  thymeleaf:
+      cache: false
+      mode: LEGACYHTML5
 
 server:
   port: 8080

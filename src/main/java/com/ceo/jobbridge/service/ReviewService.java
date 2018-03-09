@@ -23,7 +23,7 @@ public class ReviewService {
      * 新增评论
      * */
     @Transactional
-    void addReview(Review review){
+    public void addReview(Review review){
         try {
             reviewRepository.save(review);
         } catch (Exception e) {
@@ -36,7 +36,7 @@ public class ReviewService {
      * */
     @Transactional
     @Modifying
-    void deleteReview(Long studentId, Long enterpriseId){
+    public void deleteReview(Long studentId, Long enterpriseId){
         Review review = reviewRepository.findByStudentIdAndEnterpriseId(studentId, enterpriseId);
         if(review == null){
             System.out.println("没找到要删除的评论");

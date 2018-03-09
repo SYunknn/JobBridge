@@ -29,7 +29,7 @@ public class CollectEnterpriseService{
      * 添加
      * */
     @Transactional
-    void save(CollectEnterprise collectEnterprise){
+    public void addCollectEnterprise(CollectEnterprise collectEnterprise){
         try {
             collectEnterpriseRepository.save(collectEnterprise);
         } catch (Exception e) {
@@ -44,7 +44,7 @@ public class CollectEnterpriseService{
      * */
     @Transactional
     @Modifying
-    void deleteById(Map<String, Object> map){
+    public void deleteById(Map<String, Object> map){
         Long enterpriseId = (Long)map.get("enterpriseId");
         Long studentId = (Long)map.get("studentId");
 

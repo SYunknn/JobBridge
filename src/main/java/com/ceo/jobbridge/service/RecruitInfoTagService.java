@@ -25,7 +25,7 @@ public class RecruitInfoTagService {
      * 添加
      * */
     @Transactional
-    void addRecruitInfoTag(RecruitInfoTag recruitInfoTag){
+    public void addRecruitInfoTag(RecruitInfoTag recruitInfoTag){
         try {
             recruitInfoTagRepository.save(recruitInfoTag);
         } catch (Exception e) {
@@ -38,7 +38,7 @@ public class RecruitInfoTagService {
      */
     @Transactional
     @Modifying
-    void deleteRecruitInfoTagByRecruitInfoId(Long recruitInfoId){
+    public void deleteRecruitInfoTagByRecruitInfoId(Long recruitInfoId){
         List<RecruitInfoTag> recruitInfoTagList =
                 recruitInfoTagRepository.findByRecruitInfoId(recruitInfoId);
         for(RecruitInfoTag recruitInfoTag : recruitInfoTagList){

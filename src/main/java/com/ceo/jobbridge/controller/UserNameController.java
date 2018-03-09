@@ -1,9 +1,7 @@
 package com.ceo.jobbridge.controller;
-
-import com.jobBridge.model.Enterprise;
-import com.jobBridge.model.Student;
-
-import com.jobBridge.util.SendInfo;
+import com.ceo.jobbridge.model.Enterprise;
+import com.ceo.jobbridge.model.Student;
+import com.ceo.jobbridge.util.SendInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

@@ -12,11 +12,15 @@ import com.ceo.jobbridge.multiKeysClasses.CollectTagMultiKeysClass;
  */
 
 @Entity
-@Table(name = "collect_enterprise")
+@Table(name = "collect_tag")
 @IdClass(CollectTagMultiKeysClass.class)
 public class CollectTag {
     private Long studentId;     //发起收藏请求的学生ID
     private Integer tagId;      //被收藏的标签ID
+
+    public CollectTag(){
+
+    }
 
     public CollectTag(Long studentId, Integer tagId) {
         this.studentId = studentId;

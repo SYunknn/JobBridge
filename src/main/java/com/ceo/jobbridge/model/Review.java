@@ -21,6 +21,10 @@ public class Review {
     private String content;     //评论内容
     private Timestamp dateTime; //评论时间
 
+    public Review(){
+
+    }
+
     public Review(Long reviewId,Long enterpriseId, Long studentId, String jobName, String content, Timestamp dateTime) {
         this.reviewId = reviewId;
         this.enterpriseId = enterpriseId;

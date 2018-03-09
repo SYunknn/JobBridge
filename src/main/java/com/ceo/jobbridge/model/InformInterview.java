@@ -20,6 +20,10 @@ public class InformInterview {
     private String content;     //通知内容
     private Timestamp dateTime; //通知时间
 
+    public InformInterview(){
+
+    }
+
     public InformInterview(Long informInterviewId, Long enterpriseId, Long studentId, String content, Timestamp dateTime) {
         this.informInterviewId = informInterviewId;
         this.enterpriseId = enterpriseId;

@@ -1,6 +1,5 @@
 package com.ceo.jobbridge.controller;
-
-import com.jobBridge.model.Manager;
+import com.ceo.jobbridge.model.Manager;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,7 +24,7 @@ public class ManagerPage {
             response.sendRedirect("/");
         }
         Manager manager = (Manager) loginUser;
-        return "/public/indexcom.html";
+        return "indexcom";
     }
     /*
     * 管理员添加新管理员界面
@@ -38,7 +37,7 @@ public class ManagerPage {
             response.sendRedirect("/");
         }
         Manager manager = (Manager) loginUser;
-        return "/public/indexadm.html";
+        return "indexadm";
     }
     /*
     * 管理员退出操作
@@ -52,6 +51,6 @@ public class ManagerPage {
         }
         Manager manager = (Manager) loginUser;
         request.getSession().removeAttribute("loginUser");
-        return "/public/index.html";
+        return "index";
     }
 }

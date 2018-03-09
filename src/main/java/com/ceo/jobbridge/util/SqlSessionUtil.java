@@ -1,3 +1,4 @@
+/*
 package com.ceo.jobbridge.util;
 
 import org.apache.ibatis.io.Resources;
@@ -126,4 +127,4 @@ public class SqlSessionUtil{
             session.close();
         }
     }
-}
+}*/

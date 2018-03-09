@@ -25,7 +25,7 @@ public class DeliverService {
      * */
     @Transactional
     @Modifying
-    void updateHaveDeleteByDeliverId(Long deliverId){
+    public void updateHaveDeleteByDeliverId(Long deliverId){
         Deliver deliver = deliverRepository.findByDeliverId(deliverId);
         if(deliver == null){
             System.out.println("该deliver不存在");
@@ -39,7 +39,7 @@ public class DeliverService {
      * 添加
      * */
     @Transactional
-    void addDeliver(Deliver deliver){
+    public void addDeliver(Deliver deliver){
         try {
             deliverRepository.save(deliver);
         } catch (Exception e) {

@@ -19,6 +19,10 @@ public class CollectEnterprise {
     private Long enterpriseId;  //被收藏的公司ID
     private Long studentId;     //发起收藏请求的学生ID
 
+    public CollectEnterprise(){
+
+    }
+
     public CollectEnterprise(Long enterpriseId, Long studentId) {
         this.enterpriseId = enterpriseId;
         this.studentId = studentId;

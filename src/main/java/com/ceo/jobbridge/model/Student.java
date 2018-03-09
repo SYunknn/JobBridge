@@ -18,6 +18,10 @@ public class Student {
     private String mailbox;
     private String password;
 
+    public Student(){
+
+    }
+
     public Student(Long studentId, String userName, String mailbox, String password) {
         this.studentId = studentId;
         this.userName = userName;

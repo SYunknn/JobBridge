@@ -14,6 +14,6 @@ public class FirstPageController {
     @RequestMapping(value = "/",method = RequestMethod.GET)
     public String firstPage(HttpServletResponse response) {
         response.setHeader("Access-Control-Allow-Origin", "*");
-        return "public/index.html";
+        return "index";
     }
 }

@@ -25,6 +25,10 @@ public class RecruitInfo {
     private String deadline;
     private Boolean haveDelete;
 
+    public RecruitInfo(){
+
+    }
+
     public RecruitInfo(Long recruitInfoId, Long enterpriseId, String jobName, String jobDescribe, String jobRequire,
                        String location, Integer lowSalary, Integer highSalary, Timestamp dateTime, String deadline, Boolean haveDelete) {
         this.recruitInfoId = recruitInfoId;
