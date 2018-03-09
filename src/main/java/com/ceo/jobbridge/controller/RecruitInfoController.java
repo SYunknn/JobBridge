@@ -1,9 +1,5 @@
 package com.ceo.jobbridge.controller;
 
-import com.jobBridge.Dao.IEnterpriseDao;
-import com.jobBridge.Dao.IRecruitInfoDao;
-import com.jobBridge.Dao.IRecruitInfoTagDao;
-import com.jobBridge.Dao.ITagDao;
 import com.jobBridge.model.Enterprise;
 import com.jobBridge.model.RecruitInfo;
 import com.jobBridge.model.RecruitInfoTag;
@@ -35,10 +31,10 @@ import java.util.Map;
 @Controller
 public class RecruitInfoController {
 
-    private IRecruitInfoDao recruitInfoService = new RecruitInfoService();
-    private IEnterpriseDao enterpriseService = new EnterpriseService();
-    private ITagDao tagService = new TagService();
-    private IRecruitInfoTagDao  recruitInfoTagService = new RecruitInfoTagService();
+    private com.jobBridge.Dao.RecruitInfoRepository recruitInfoService = new RecruitInfoService();
+    private com.jobBridge.Dao.EnterpriseRepository enterpriseService = new EnterpriseService();
+    private com.jobBridge.Dao.TagRepository tagService = new TagService();
+    private com.jobBridge.Dao.RecruitInfoTagRepository recruitInfoTagService = new RecruitInfoTagService();
 
     /**
      * 这里可以无登录访问

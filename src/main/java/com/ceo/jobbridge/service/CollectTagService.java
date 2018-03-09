@@ -1,24 +1,75 @@
-package com.jobBridge.service;
+package com.ceo.jobbridge.service;
 
-import com.jobBridge.Dao.ICollectTagDao;
-import com.jobBridge.model.CollectTag;
-import com.jobBridge.util.SqlSessionUtil;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-
-import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayList;
+import com.ceo.jobbridge.multiKeysClasses.CollectTagMultiKeysClass;
+import com.ceo.jobbridge.model.CollectTag;
+import com.ceo.jobbridge.repository.CollectTagRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.stereotype.Service;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Created by HanrAx on 2017/7/21.
  */
-public class CollectTagService implements ICollectTagDao {
-    private SqlSessionFactory sessionFactory;
+@Service
+public class CollectTagService {
+    @Autowired
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Autowired
+    private CollectTagRepository collectTagRepository;
+
+    /**
+     * 添加
+     * */
+    @Transactional
+    void save(CollectTag collectTag){
+        try {
+            collectTagRepository.save(collectTag);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+    }
+
+    /**
+     * 删除该学生收藏的所有标签
+     * */
+    @Transactional
+    @Modifying
+    void deleteCollectTagByStudentId(Long studentId){
+        List<CollectTag> collectTagList = collectTagRepository.findByStudentId(studentId);
+        for (CollectTag collectTag : collectTagList){
+            collectTagRepository.delete(collectTag);
+        }
+    }
+
+    /**
+     * 删除学生收藏的某个标签
+     * */
+    @Transactional
+    @Modifying
+    void deleteCollectTagById(Map<String, Object> map){
+        Long studentId = (Long)map.get("studentId");
+        Integer tagId = (Integer)map.get("tagId");
+
+        CollectTagMultiKeysClass collectTagMultiKeysClass =
+                new CollectTagMultiKeysClass(studentId, tagId);
+
+        CollectTag collectTag = entityManager.find(CollectTag.class, collectTagMultiKeysClass);
+        if(collectTag == null){
+            System.out.println("没有找到要删除的CollectEnterprise对象");
+        }else{
+            collectTagRepository.delete(collectTag);
+        }
+
+    }
+
+    /*private SqlSessionFactory sessionFactory;
     public CollectTagService() {
         sessionFactory = SqlSessionUtil.sqlSessionFactoryBuild();
     }
@@ -37,16 +88,6 @@ public class CollectTagService implements ICollectTagDao {
             }
             return collectTagList;
         }
-        /*List<CollectTag> list = null;
-        try{
-            session = sessionFactory.openSession();
-            list = session.selectList(statement,studentId);
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally {
-            session.close();
-        }
-        return list;*/
     }
 
     @Override
@@ -65,20 +106,6 @@ public class CollectTagService implements ICollectTagDao {
     public void deleteCollectTagById(Map<String,Object> map) {
         String statement = "collectTagMapper.deleteCollectTagById";
         SqlSessionUtil.deleteOp(statement,map,sessionFactory);
-        /*try{
-            session = sessionFactory.openSession();
-            int result = session.delete(statement,map);
-            session.commit();  //一定要记得commit
-            if(result > 0){
-                System.out.println("删除收藏成功");
-            }else{
-                System.out.println("删除收藏失败");
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally {
-            session.close();
-        }*/
-    }
+    }*/
 
 }

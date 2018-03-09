@@ -1,13 +1,20 @@
 package com.ceo.jobbridge.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.sql.Timestamp;
 
 /**
  * Created by GeniusHe on 2017/7/20.
  * 简历投递类
  */
+@Entity
 public class Deliver {
+    @Id
+    @GeneratedValue
     private Long deliverId;
+
     private Long resumeId;      //学生对应简历Id
     private Long enterpriseId;  //被投简历的公司Id
     private Long recruitInfoId;         //招聘信息号

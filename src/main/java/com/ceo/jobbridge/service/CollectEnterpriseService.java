@@ -1,15 +1,15 @@
 package com.ceo.jobbridge.service;
 
-import com.ceo.jobbridge.repository.ICollectEnterpriseDao;
 import com.ceo.jobbridge.model.CollectEnterprise;
+import com.ceo.jobbridge.multiKeysClasses.CollectEnterpriseMultiKeysClass;
+import com.ceo.jobbridge.repository.CollectEnterpriseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,12 +23,45 @@ public class CollectEnterpriseService{
     private EntityManager entityManager;
 
     @Autowired
-    private ICollectEnterpriseDao iCollectEnterpriseDao;
+    private CollectEnterpriseRepository collectEnterpriseRepository;
 
-    @Override
+    /**
+     * 添加
+     * */
+    @Transactional
+    void save(CollectEnterprise collectEnterprise){
+        try {
+            collectEnterpriseRepository.save(collectEnterprise);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+    }
+
+    /**
+     * 删除
+     * <"student_id",12>
+     * <"enterprise_id",11>
+     * */
+    @Transactional
+    @Modifying
+    void deleteById(Map<String, Object> map){
+        Long enterpriseId = (Long)map.get("enterpriseId");
+        Long studentId = (Long)map.get("studentId");
+
+        CollectEnterpriseMultiKeysClass collectEnterpriseMultiKeysClass =
+                new CollectEnterpriseMultiKeysClass(enterpriseId, studentId);
+        CollectEnterprise collectEnterprise =
+                entityManager.find(CollectEnterprise.class, collectEnterpriseMultiKeysClass);
+        if(collectEnterprise == null){
+            System.out.println("没有找到要删除的CollectEnterprise对象");
+        }else{
+            collectEnterpriseRepository.delete(collectEnterprise);
+        }
+    }
+    /*@Override
     @Transactional
     public void
-    /*private SqlSessionFactory sessionFactory;
+    private SqlSessionFactory sessionFactory;
 
     public CollectEnterpriseService() {
         sessionFactory = SqlSessionUtil.sqlSessionFactoryBuild();
@@ -51,8 +84,8 @@ public class CollectEnterpriseService{
     }
 
     @Override
-    public void ICollectEnterpriseDao(CollectEnterprise collectEnterprise) {
-        String statement = "collectEnterpriseMapper.ICollectEnterpriseDao";
+    public void CollectEnterpriseRepository(CollectEnterprise collectEnterprise) {
+        String statement = "collectEnterpriseMapper.CollectEnterpriseRepository";
         SqlSessionUtil.insertOp(statement,collectEnterprise,sessionFactory);
     }
 

@@ -1,6 +1,5 @@
-package com.jobBridge.service;
+package com.ceo.jobbridge.service;
 
-import com.jobBridge.Dao.IResumeDetailDao;
 import com.jobBridge.model.*;
 import com.jobBridge.util.SqlSessionUtil;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -11,7 +10,7 @@ import java.util.List;
 /**
  * Created by Administrator on 2017/7/27 0027.
  */
-public class ResumeDetailService implements IResumeDetailDao {
+public class ResumeDetailService implements com.jobBridge.Dao.ResumeDetailRepository {
     private SqlSessionFactory sessionFactory;
 
     public ResumeDetailService() {

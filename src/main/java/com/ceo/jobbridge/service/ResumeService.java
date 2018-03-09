@@ -1,13 +1,4 @@
-package com.jobBridge.service;
-
-import com.jobBridge.Dao.IResumeDao;
-import com.jobBridge.model.Resume;
-import com.jobBridge.model.Student;
-import com.jobBridge.util.SqlSessionUtil;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+package com.ceo.jobbridge.service;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -15,9 +6,9 @@ import java.io.Reader;
 /**
  * Created by SYunk on 2017/7/21.
  */
-public class ResumeService implements IResumeDao {
+public class ResumeService {
 
-    private SqlSessionFactory sessionFactory;
+/*    private SqlSessionFactory sessionFactory;
     private SqlSession session;
     public ResumeService() {
         String resource = "mybatisConf.xml";
@@ -71,5 +62,5 @@ public class ResumeService implements IResumeDao {
         }finally {
             session.close();
         }
-    }
+    }*/
 }

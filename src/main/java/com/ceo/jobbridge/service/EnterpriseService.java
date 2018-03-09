@@ -1,18 +1,35 @@
-package com.jobBridge.service;
+package com.ceo.jobbridge.service;
 
-import com.jobBridge.Dao.IEnterpriseDao;
-import com.jobBridge.model.Enterprise;
-import com.jobBridge.util.SqlSessionUtil;
+import com.ceo.jobbridge.model.Enterprise;
+import com.ceo.jobbridge.repository.EnterpriseRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import javax.transaction.Transactional;
 
-import org.apache.ibatis.session.SqlSessionFactory;
 
 
 /**
  * Created by SYunk on 2017/7/20.
  */
-public class EnterpriseService implements IEnterpriseDao {
+@Service
+public class EnterpriseService {
 
-    private SqlSessionFactory sessionFactory;
+    @Autowired
+    private EnterpriseRepository enterpriseRepository;
+
+    /**
+     * 添加
+     * */
+    @Transactional
+    void save(Enterprise enterprise){
+        try {
+            enterpriseRepository.save(enterprise);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+    }
+
+/*    private SqlSessionFactory sessionFactory;
 
     public EnterpriseService() {
         sessionFactory = SqlSessionUtil.sqlSessionFactoryBuild();
@@ -48,5 +65,5 @@ public class EnterpriseService implements IEnterpriseDao {
     public void addEnterprise(Enterprise enterprise) {
         String statement = "enterpriseMapper.addEnterprise";
         SqlSessionUtil.insertOp(statement,enterprise,sessionFactory);
-    }
+    }*/
 }

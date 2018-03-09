@@ -1,13 +1,20 @@
 package com.ceo.jobbridge.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.sql.Timestamp;
 
 /**
  * Created by GeniusHan on 2017/7/19.
  *  面试通知类
  */
+@Entity
 public class InformInterview {
+    @Id
+    @GeneratedValue
     private Long informInterviewId;   //通知ID
+
     private Long enterpriseId;  //面试发出公司ID
     private Long studentId;     //面试学生ID
     private String content;     //通知内容

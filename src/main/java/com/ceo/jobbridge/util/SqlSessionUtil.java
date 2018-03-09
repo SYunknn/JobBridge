@@ -1,4 +1,4 @@
-package com.jobBridge.util;
+package com.ceo.jobbridge.util;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;

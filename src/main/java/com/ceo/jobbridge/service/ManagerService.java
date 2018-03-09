@@ -1,18 +1,32 @@
-package com.jobBridge.service;
+package com.ceo.jobbridge.service;
 
 
-import com.jobBridge.Dao.IManagerDao;
-import com.jobBridge.model.Manager;
-import com.jobBridge.util.SqlSessionUtil;
-
-import org.apache.ibatis.session.SqlSessionFactory;
+import com.ceo.jobbridge.model.Manager;
+import com.ceo.jobbridge.repository.ManagerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import javax.transaction.Transactional;
 
 /**
  * Created by HanrAx on 2017/7/20.
  */
-public class ManagerService implements IManagerDao {
+@Service
+public class ManagerService{
 
-    private SqlSessionFactory sessionFactory;
+    @Autowired
+    private ManagerRepository managerRepository;
+
+    @Transactional
+    void save(Manager manager){
+        try {
+            managerRepository.save(manager);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+    }
+
+
+    /*private SqlSessionFactory sessionFactory;
 
     public ManagerService() {
         sessionFactory = SqlSessionUtil.sqlSessionFactoryBuild();
@@ -42,5 +56,5 @@ public class ManagerService implements IManagerDao {
     public void addManager(Manager manager) {
         String statement = "managerMapper.addManager";
         SqlSessionUtil.insertOp(statement,manager,sessionFactory);
-    }
+    }*/
 }

@@ -1,4 +1,4 @@
-package com.jobBridge.util;
+package com.ceo.jobbridge.util;
 
 
 import org.springframework.mail.javamail.JavaMailSenderImpl;

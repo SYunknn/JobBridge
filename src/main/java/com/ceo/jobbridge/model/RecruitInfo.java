@@ -1,12 +1,19 @@
 package com.ceo.jobbridge.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.sql.Timestamp;
 
 /**
  * Created by SYunk on 2017/7/20.
  */
+@Entity
 public class RecruitInfo {
+    @Id
+    @GeneratedValue
     private Long recruitInfoId;
+
     private Long enterpriseId;
     private String jobName;
     private String jobDescribe;

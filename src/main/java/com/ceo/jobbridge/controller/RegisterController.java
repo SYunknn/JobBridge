@@ -1,12 +1,9 @@
 package com.ceo.jobbridge.controller;
 
-import com.jobBridge.Dao.IEnterpriseDao;
-import com.jobBridge.Dao.IManagerDao;
 import com.jobBridge.Dao.IResumeDao;
 import com.jobBridge.Dao.IStudentDao;
 import com.jobBridge.model.Enterprise;
 import com.jobBridge.model.Manager;
-import com.jobBridge.model.Resume;
 import com.jobBridge.service.EnterpriseService;
 import com.jobBridge.service.ManagerService;
 import com.jobBridge.service.ResumeService;
@@ -28,8 +25,8 @@ import java.io.PrintWriter;
 public class RegisterController {
 
     private IStudentDao studentService = new StudentService();
-    private IManagerDao managerService = new ManagerService();
-    private IEnterpriseDao enterpriseService = new EnterpriseService();
+    private com.jobBridge.Dao.ManagerRepository managerService = new ManagerService();
+    private com.jobBridge.Dao.EnterpriseRepository enterpriseService = new EnterpriseService();
     private IResumeDao resumeService = new ResumeService();
 
     /**

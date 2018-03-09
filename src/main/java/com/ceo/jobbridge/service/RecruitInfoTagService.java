@@ -1,20 +1,53 @@
-package com.jobBridge.service;
+package com.ceo.jobbridge.service;
 
-import com.jobBridge.Dao.IRecruitInfoTagDao;
-import com.jobBridge.model.RecruitInfoTag;
-import com.jobBridge.util.SqlSessionUtil;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
+import com.ceo.jobbridge.repository.RecruitInfoTagRepository;
+import com.ceo.jobbridge.model.RecruitInfoTag;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by SYunk on 2017/7/25.
  */
-public class RecruitInfoTagService implements IRecruitInfoTagDao {
+@Service
+public class RecruitInfoTagService {
 
-    private SqlSessionFactory sessionFactory;
+    @Autowired
+    private RecruitInfoTagRepository recruitInfoTagRepository;
+
+    /**
+     * 添加
+     * */
+    @Transactional
+    void addRecruitInfoTag(RecruitInfoTag recruitInfoTag){
+        try {
+            recruitInfoTagRepository.save(recruitInfoTag);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+    }
+
+    /**
+     * 删除该招聘信息对应的所有标签
+     */
+    @Transactional
+    @Modifying
+    void deleteRecruitInfoTagByRecruitInfoId(Long recruitInfoId){
+        List<RecruitInfoTag> recruitInfoTagList =
+                recruitInfoTagRepository.findByRecruitInfoId(recruitInfoId);
+        for(RecruitInfoTag recruitInfoTag : recruitInfoTagList){
+            recruitInfoTagRepository.delete(recruitInfoTag);
+        }
+    }
+
+
+/*    private SqlSessionFactory sessionFactory;
     private SqlSession session;
     public RecruitInfoTagService() {
         sessionFactory = SqlSessionUtil.sqlSessionFactoryBuild();
@@ -66,5 +99,5 @@ public class RecruitInfoTagService implements IRecruitInfoTagDao {
         }finally {
             session.close();
         }
-    }
+    }*/
 }

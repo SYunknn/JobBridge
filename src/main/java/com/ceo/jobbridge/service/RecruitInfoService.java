@@ -1,25 +1,108 @@
-package com.jobBridge.service;
+package com.ceo.jobbridge.service;
 
-import com.jobBridge.Dao.IRecruitInfoDao;
-import com.jobBridge.model.RecruitInfo;
-import com.jobBridge.util.SqlSessionUtil;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-
-import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayList;
+import com.ceo.jobbridge.model.RecruitInfo;
+import com.ceo.jobbridge.repository.RecruitInfoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.stereotype.Service;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * Created by SYunk on 2017/7/21.
  */
-public class RecruitInfoService implements IRecruitInfoDao {
+@Service
+public class RecruitInfoService {
 
-    private SqlSessionFactory sessionFactory;
+    @Autowired
+    private RecruitInfoRepository recruitInfoRepository;
+
+
+    /**
+     * 更新haveDelete
+     * */
+    @Transactional
+    @Modifying
+    void updateHaveDeleteById(Long recruitInfoId){
+        RecruitInfo recruitInfo = recruitInfoRepository.findByRecruitInfoId(recruitInfoId);
+        if(recruitInfo == null){
+            System.out.println("没找到需要更新的RecruitInfo");
+        }else{
+            recruitInfo.setHaveDelete(true);
+            recruitInfoRepository.save(recruitInfo);
+        }
+    }
+
+
+    /**
+     * 添加
+     * */
+    @Transactional
+    void save(RecruitInfo recruitInfo){
+        try {
+            recruitInfoRepository.save(recruitInfo);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+    }
+
+
+    /**
+     * 更新
+     * */
+    @Transactional
+    @Modifying
+    void updateRecruitInfoById(Map<String,Object> map){
+
+        Long recruitInfoId = (Long)map.get("recruitInfoId");
+        String jobName = (String)map.get("jobName");
+        String jobDescribe = (String)map.get("jobDescribe");
+        String jobRequire = (String)map.get("jobRequire");
+        String location = (String)map.get("location");
+        Integer lowSalary = (Integer)map.get("lowSalary");
+        Integer highSalary = (Integer)map.get("highSalary");
+        String deadline = (String) map.get("deadline");
+
+        RecruitInfo recruitInfo = recruitInfoRepository.findByRecruitInfoId(recruitInfoId);
+        if(recruitInfo == null){
+            System.out.println("需要更新的RecruitInfo不存在");
+        }else{
+            recruitInfo.setJobName(jobName);
+            recruitInfo.setJobDescribe(jobDescribe);
+            recruitInfo.setJobRequire(jobRequire);
+            recruitInfo.setLocation(location);
+            recruitInfo.setLowSalary(lowSalary);
+            recruitInfo.setHighSalary(highSalary);
+            recruitInfo.setDeadline(deadline);
+
+            recruitInfoRepository.save(recruitInfo);
+        }
+
+    }
+
+    /**
+     * 根据id删除
+     * */
+    @Transactional
+    @Modifying
+    void deleteRecruitInfoById(Long recruitInfoId){
+        RecruitInfo recruitInfo = recruitInfoRepository.findByRecruitInfoId(recruitInfoId);
+        if(recruitInfo == null){
+            System.out.println("要删除的RecruitInfo不存在");
+        }else{
+            recruitInfoRepository.delete(recruitInfo);
+        }
+    }
+
+
+
+    /*private SqlSessionFactory sessionFactory;
     private SqlSession session;
     public RecruitInfoService() {
         sessionFactory = SqlSessionUtil.sqlSessionFactoryBuild();
@@ -50,16 +133,6 @@ public class RecruitInfoService implements IRecruitInfoDao {
             }
             return recruitInfoList;
         }
-       /* List<RecruitInfo> list = null;
-        try{
-            session = sessionFactory.openSession();
-            list = session.selectList(statement,enterpriseId);
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally {
-            session.close();
-        }
-        return list;*/
     }
     public RecruitInfo findLastRecruitInfoByEnterpriseId(Long enterpriseId){
         String statement = "recruitInfoMapper.findLastRecruitInfoByEnterpriseId";
@@ -176,5 +249,5 @@ public class RecruitInfoService implements IRecruitInfoDao {
         }finally {
             session.close();
         }
-    }
+    }*/
 }

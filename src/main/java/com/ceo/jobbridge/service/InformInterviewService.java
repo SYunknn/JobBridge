@@ -1,21 +1,54 @@
-package com.jobBridge.service;
+package com.ceo.jobbridge.service;
 
-import com.jobBridge.Dao.IInformInterviewDao;
-import com.jobBridge.model.InformInterview;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import com.ceo.jobbridge.model.InformInterview;
+import com.ceo.jobbridge.repository.InformInterviewRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.stereotype.Service;
+import javax.transaction.Transactional;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.util.List;
 
 /**
  * Created by HanrAx on 2017/7/20.
  */
-public class InformInterviewService implements IInformInterviewDao{
-    private SqlSessionFactory sessionFactory;
+@Service
+public class InformInterviewService {
+    @Autowired
+    private InformInterviewRepository informInterviewRepository;
+
+    /**
+     * 添加
+     * */
+    @Transactional
+    void add(InformInterview informInterview){
+        try {
+            informInterviewRepository.save(informInterview);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+    }
+
+    /**
+     * 根据informInterviewId 
+     * */
+    @Transactional
+    @Modifying
+    void deleteInterviewById(Long informInterviewId){
+        try {
+            InformInterview informInterview =
+                    informInterviewRepository.findByInformInterviewId(informInterviewId);
+            if(informInterview == null){
+                System.out.println("要删除的InformInterview对象不存在");
+            }else{
+                informInterviewRepository.delete(informInterview);
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+    }
+
+    /*private SqlSessionFactory sessionFactory;
     private SqlSession session;
     public InformInterviewService() {
         String resource = "mybatisConf.xml";
@@ -108,5 +141,5 @@ public class InformInterviewService implements IInformInterviewDao{
         }finally {
             session.close();
         }
-    }
+    }*/
 }

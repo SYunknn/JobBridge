@@ -1,17 +1,63 @@
-package com.jobBridge.service;
+package com.ceo.jobbridge.service;
 
-import com.jobBridge.Dao.IStudentDetailDao;
-import com.jobBridge.model.StudentDetail;
-import com.jobBridge.util.SqlSessionUtil;
+import com.ceo.jobbridge.model.StudentDetail;
+import com.ceo.jobbridge.repository.StudentDetailRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.stereotype.Service;
 
-import org.apache.ibatis.session.SqlSessionFactory;
+import javax.transaction.Transactional;
 
 /**
  * Created by SYunk on 2017/7/20.
  */
-public class StudentDetailService implements IStudentDetailDao {
 
-    private SqlSessionFactory sessionFactory;
+@Service
+public class StudentDetailService {
+
+    @Autowired
+    private StudentDetailRepository studentDetailRepository;
+
+    /**
+     * 添加学生详细信息
+     * */
+    @Transactional
+    void addStudentDetail(StudentDetail studentDetail){
+        try {
+            studentDetailRepository.save(studentDetail);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+    }
+
+    /**
+     * 删除学生详细信息
+     * */
+    @Transactional
+    @Modifying
+    void deleteByStudentId(Long studentId){
+        StudentDetail studentDetail = studentDetailRepository.findByStudentId(studentId);
+        if(studentDetail != null){
+            studentDetailRepository.delete(studentDetail);
+        }
+    }
+
+    /**
+     * 通过学生id，修改学生验证位
+     * */
+    @Transactional
+    @Modifying
+    void updateStudentDetailValidationByStudentId(Long studentId){
+        StudentDetail studentDetail = studentDetailRepository.findByStudentId(studentId);
+        if(studentDetail == null){
+            System.out.println("该学生不存在");
+        }else{
+            studentDetail.setValidation(true);
+            studentDetailRepository.save(studentDetail);
+        }
+    }
+
+    /*private SqlSessionFactory sessionFactory;
 
     public StudentDetailService() {
         sessionFactory = SqlSessionUtil.sqlSessionFactoryBuild();
@@ -39,6 +85,6 @@ public class StudentDetailService implements IStudentDetailDao {
     public void updateStudentDetailValidationByStudentId(Long studentId) {
         String statement = "studentDetailMapper.updateStudentDetailValidationByStudentId";
         SqlSessionUtil.updateOp(statement,studentId,sessionFactory);
-    }
+    }*/
 
 }

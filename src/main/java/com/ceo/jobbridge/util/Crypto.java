@@ -1,4 +1,4 @@
-package com.jobBridge.util;
+package com.ceo.jobbridge.util;
 
 /**
  * Created by SYunk on 2017/5/6.

@@ -1,4 +1,4 @@
-package com.jobBridge.model;
+package com.ceo.jobbridge.model;
 
 /**
  * Created by SYunk on 2017/7/20.

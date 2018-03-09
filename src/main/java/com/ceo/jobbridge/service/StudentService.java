@@ -1,18 +1,37 @@
-package com.jobBridge.service;
+package com.ceo.jobbridge.service;
 
-import com.jobBridge.Dao.IStudentDao;
-import com.jobBridge.model.Student;
-import com.jobBridge.util.SqlSessionUtil;
+import com.ceo.jobbridge.model.Student;
+import com.ceo.jobbridge.repository.StudentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
+import javax.transaction.Transactional;
 
 
 /**
  * Created by SYunk on 2017/7/19.
  */
-public class StudentService implements IStudentDao {
-    private SqlSessionFactory sessionFactory;
+
+@Service
+public class StudentService {
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    /**
+     * 新增注册的学生账号
+     * */
+    @Transactional
+    void addStudent(Student student){
+        try {
+            studentRepository.save(student);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+    }
+
+
+    /*private SqlSessionFactory sessionFactory;
     public StudentService() {
         sessionFactory = SqlSessionUtil.sqlSessionFactoryBuild();
     }
@@ -48,5 +67,5 @@ public class StudentService implements IStudentDao {
     public void addStudent(Student student) {
         String statement = "studentMapper.addStudent";
         SqlSessionUtil.insertOp(statement,student,sessionFactory);
-    }
+    }*/
 }

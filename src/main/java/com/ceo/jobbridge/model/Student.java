@@ -1,10 +1,19 @@
 package com.ceo.jobbridge.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 /**
  * Created by SYunk on 2017/7/19.
  */
+
+@Entity
 public class Student {
+    @Id
+    @GeneratedValue
     private Long studentId;
+
     private String userName;
     private String mailbox;
     private String password;

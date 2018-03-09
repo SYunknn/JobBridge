@@ -1,15 +1,32 @@
-package com.jobBridge.service;
+package com.ceo.jobbridge.service;
 
-import com.jobBridge.Dao.ITagDao;
-import com.jobBridge.model.Tag;
-import com.jobBridge.util.SqlSessionUtil;
-import org.apache.ibatis.session.SqlSessionFactory;
+import com.ceo.jobbridge.model.Tag;
+import com.ceo.jobbridge.repository.TagRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 /**
  * Created by Administrator on 2017/7/24 0024.
  */
-public class TagService implements ITagDao {
-    private SqlSessionFactory sessionFactory;
+@Service
+public class TagService {
+
+    @Autowired
+    private TagRepository tagRepository;
+
+    @Transactional
+    void addTag(Tag tag){
+        try {
+            tagRepository.save(tag);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+    }
+
+
+   /* private SqlSessionFactory sessionFactory;
 
     public TagService(){
         sessionFactory = SqlSessionUtil.sqlSessionFactoryBuild();
@@ -37,5 +54,5 @@ public class TagService implements ITagDao {
     public void addTag(Tag tag){
         String statement = "tagMapper.addTag";
         SqlSessionUtil.insertOp(statement,tag,sessionFactory);
-    }
+    }*/
 }

@@ -1,9 +1,16 @@
 package com.ceo.jobbridge.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 /**
  * Created by GeniusHe on 2017/7/19.
  */
+@Entity
 public class Manager {
+    @Id
+    @GeneratedValue
     private Integer managerId;  //管理员id
     private String userName;    //管理员用户名
     private String password;    //管理员密码

@@ -1,12 +1,13 @@
 package com.ceo.jobbridge.controller;
 
-import com.jobBridge.Dao.*;
-import com.jobBridge.model.*;
-import com.jobBridge.service.*;
-import com.jobBridge.util.ParseStringUtil;
-import com.jobBridge.util.SendInfo;
+import com.ceo.jobbridge.model.*;
+import com.ceo.jobbridge.repository.CollectEnterpriseRepository;
+import com.ceo.jobbridge.service.*;
+import com.ceo.jobbridge.util.ParseStringUtil;
+import com.ceo.jobbridge.util.SendInfo;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,13 +26,15 @@ import java.util.Map;
 @Controller
 public class EnterprisePage {
 
-    private IRecruitInfoDao recruitInfoService = new RecruitInfoService();
-    private IDeliverDao deliverService = new DeliverService();
-    private ITagDao tagService = new TagService();
-    private IRecruitInfoTagDao recruitInfoTagService = new RecruitInfoTagService();
-    private IResumeDao resumeService = new ResumeService();
-    private IStudentDao studentService = new StudentService();
-    private IResumeDetailDao resumeDetailService = new ResumeDetailService();
+    @Autowired
+    private CollectEnterpriseRepository collectEnterpriseRepository;
+
+//    private IDeliverDao deliverService = new DeliverService();
+//    private ITagDao tagService = new TagService();
+//    private IRecruitInfoTagDao recruitInfoTagService = new RecruitInfoTagService();
+//    private IResumeDao resumeService = new ResumeService();
+//    private IStudentDao studentService = new StudentService();
+//    private IResumeDetailDao resumeDetailService = new ResumeDetailService();
 
 
     /**

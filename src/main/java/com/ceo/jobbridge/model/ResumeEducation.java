@@ -1,4 +1,4 @@
-package com.jobBridge.model;
+package com.ceo.jobbridge.model;
 
 import java.util.Date;
 

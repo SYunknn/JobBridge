@@ -1,9 +1,7 @@
 package com.ceo.jobbridge.controller;
 
-import com.jobBridge.Dao.IManagerDao;
 import com.jobBridge.model.Manager;
 import com.jobBridge.service.EnterpriseService;
-import com.jobBridge.Dao.IEnterpriseDao;
 import com.jobBridge.Dao.IStudentDao;
 import com.jobBridge.service.ManagerService;
 import com.jobBridge.service.StudentService;
@@ -27,8 +25,8 @@ import java.util.Map;
 public class LoginController {
 
     private IStudentDao studentService = new StudentService();
-    private IEnterpriseDao enterpriseService = new EnterpriseService();
-    private IManagerDao managerService = new ManagerService();
+    private com.jobBridge.Dao.EnterpriseRepository enterpriseService = new EnterpriseService();
+    private com.jobBridge.Dao.ManagerRepository managerService = new ManagerService();
 
     @RequestMapping(value = "/forLogin/com",method = RequestMethod.GET)
     public String comForLogin(HttpServletRequest request, HttpServletResponse response) {

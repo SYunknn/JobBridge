@@ -1,4 +1,4 @@
-package com.jobBridge.util;
+package com.ceo.jobbridge.util;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;

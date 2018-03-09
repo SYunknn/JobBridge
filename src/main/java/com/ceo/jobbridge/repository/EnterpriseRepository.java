@@ -1,0 +1,19 @@
+package com.ceo.jobbridge.repository;
+
+import com.ceo.jobbridge.model.Enterprise;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+
+/**
+ * Created by SYunk on 2017/7/20.
+ */
+public interface EnterpriseRepository extends JpaRepository<Enterprise,Long> {
+
+    Enterprise findByEnterpriseId(Long enterpriseId); //根据公司号查询公司
+
+    Enterprise findByUserName(String userName); //根据用户名查找公司
+
+    Enterprise findByMailbox(String mailbox); //根据邮箱查找公司
+
+    //void addEnterprise(Enterprise enterprise);  //新增注册的公司账号
+}

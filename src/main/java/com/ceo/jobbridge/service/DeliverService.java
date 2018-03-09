@@ -1,16 +1,12 @@
-package com.jobBridge.service;
+package com.ceo.jobbridge.service;
 
-import com.jobBridge.Dao.IDeliverDao;
-import com.jobBridge.model.Deliver;
-import com.jobBridge.util.SqlSessionUtil;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import com.ceo.jobbridge.model.Deliver;
+import com.ceo.jobbridge.repository.DeliverRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.sql.Timestamp;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +14,39 @@ import java.util.Map;
 /**
  * Created by HanrAx on 2017/7/21.
  */
-public class DeliverService implements IDeliverDao{
-    private SqlSessionFactory sessionFactory;
+@Service
+public class DeliverService {
+
+    @Autowired
+    private DeliverRepository deliverRepository;
+
+    /**
+     * 更新
+     * */
+    @Transactional
+    @Modifying
+    void updateHaveDeleteByDeliverId(Long deliverId){
+        Deliver deliver = deliverRepository.findByDeliverId(deliverId);
+        if(deliver == null){
+            System.out.println("该deliver不存在");
+        }else{
+            deliver.setHaveDelete(true);
+            deliverRepository.save(deliver);
+        }
+    }
+
+    /**
+     * 添加
+     * */
+    @Transactional
+    void addDeliver(Deliver deliver){
+        try {
+            deliverRepository.save(deliver);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+    }
+    /*private SqlSessionFactory sessionFactory;
     private SqlSession session;
     public DeliverService() {
        sessionFactory = SqlSessionUtil.sqlSessionFactoryBuild();
@@ -38,16 +65,7 @@ public class DeliverService implements IDeliverDao{
                 }
                 return deliverList;
             }
-           /* List<Deliver> list = null;
-            try{
-                session = sessionFactory.openSession();
-                list = session.selectList(statement,map);
-            }catch(Exception e){
-                e.printStackTrace();
-            }finally {
-                session.close();
-            }
-            return list;*/
+
     }
 
     @Override
@@ -103,5 +121,5 @@ public class DeliverService implements IDeliverDao{
     public void addDeliver(Deliver deliver) {
         String statement = "deliverMapper.addDeliver";
         SqlSessionUtil.insertOp(statement,deliver,sessionFactory);
-    }
+    }*/
 }

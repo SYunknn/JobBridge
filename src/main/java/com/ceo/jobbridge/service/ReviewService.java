@@ -1,22 +1,51 @@
-package com.jobBridge.service;
+package com.ceo.jobbridge.service;
 
-import com.jobBridge.Dao.IReviewDao;
-import com.jobBridge.model.Review;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import com.ceo.jobbridge.model.Review;
+import com.ceo.jobbridge.repository.ReviewRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.util.List;
-import java.util.Map;
+import javax.transaction.Transactional;
+
 
 /**
  * Created by HanrAx on 2017/7/20.
  */
-public class ReviewService implements IReviewDao{
-    private SqlSessionFactory sessionFactory;
+
+@Service
+public class ReviewService {
+
+    @Autowired
+    private ReviewRepository reviewRepository;
+
+    /**
+     * 新增评论
+     * */
+    @Transactional
+    void addReview(Review review){
+        try {
+            reviewRepository.save(review);
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+    }
+
+    /**
+     * 删除评论
+     * */
+    @Transactional
+    @Modifying
+    void deleteReview(Long studentId, Long enterpriseId){
+        Review review = reviewRepository.findByStudentIdAndEnterpriseId(studentId, enterpriseId);
+        if(review == null){
+            System.out.println("没找到要删除的评论");
+        }else{
+            reviewRepository.delete(review);
+        }
+    }
+
+    /*private SqlSessionFactory sessionFactory;
     private SqlSession session;
     public ReviewService() {
         String resource = "mybatisConf.xml";
@@ -94,5 +123,5 @@ public class ReviewService implements IReviewDao{
         }finally {
             session.close();
         }
-    }
+    }*/
 }
