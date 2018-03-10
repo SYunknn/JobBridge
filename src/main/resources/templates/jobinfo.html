@@ -593,7 +593,7 @@ TOP BAR CONTENT & NOTIFICATIONS
     <!--header start-->
     <header class="header my-nav">
         <!--logo start-->
-        <a href="../public/index.html" class="logo"><b><span style="color: black">JobBridge</span></b></a>
+        <a href="../" class="logo"><b><span style="color: black">JobBridge</span></b></a>
         <!--logo end-->
 
         <div class="top-menu">
@@ -669,7 +669,7 @@ MAIN CONTENT
                                                                                 <label><span id="deadline" class="my-label" style="margin-left: 0px;padding-left: 0px"></span></label><strong>截止</strong>
                                                                             </div>
                                                                             <i class="fa fa-rmb"></i>
-                                                                            <div class="value" data-jsx="3479566426" data-reactid="70"  style="padding-left: 0px" style="margin-left: 0px"  >
+                                                                            <div class="value" data-jsx="3479566426" data-reactid="70"  style="padding-left: 0px;margin-left: 0px" >
                                                                                 <label><span id="lowSalary" class="my-label" style="margin-left: 0;padding-left: 0px"></span></label>—
                                                                                 <label><span id="highSalary" class="my-label" style="margin-left: 0;padding-left: 0px"></span></label>
                                                                             </div>
@@ -768,6 +768,10 @@ MAIN CONTENT
                 </div>
             </div>
             <!-- page end-->
+            <div style="display: none" >
+                <span id="jobInfoId" th:text="${id}">
+                </span>
+            </div>
         </section>
     </section>
     <!-- /MAIN CONTENT -->

@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -99,12 +100,14 @@ public class StudentPage {
      * 学生请求具体招聘信息页面
      * */
     @RequestMapping(value = "/studentcenter/recruitinfo",method = RequestMethod.GET)
-    public String studentRecruitInfo(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public String studentRecruitInfo(HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
         response.setHeader("Access-Control-Allow-Origin", "*");
         Object loginUser = request.getSession().getAttribute("loginUser");
         if(loginUser == null || !(loginUser instanceof Student)){
             response.sendRedirect("/");
         }
+        String id = request.getParameter("id");
+        model.addAttribute("id", id);
         return "jobinfo";
     }
 

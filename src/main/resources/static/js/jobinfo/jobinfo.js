@@ -8,16 +8,24 @@ $(document).ready(function () {
 * @author:Huangzhenyang
 * 获取url中的参数
 * */
-function getUrlParameter(name)
+/*function getUrlParameter(name)
 {
     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
     var r = window.location.search.substr(1).match(reg);
     if(r!=null)return  unescape(r[2]); return null;
+}*/
+
+/**
+ * @author:Huangzhenyang
+ * 获取jobinfo的id
+ * */
+function getJobInfoId() {
+    return $('#jobInfoId').text();
 }
 
-
 function  getData() {
-    var jobId = getUrlParameter('id');
+    //var jobId = getUrlParameter('id');
+    let jobId = getJobInfoId();
     $.ajax({
         url: '/studentcenter/showrecruitinfo?id='+jobId,
         type: 'get',
@@ -31,10 +39,10 @@ function  getData() {
 
 
 function setData(data) {
-    var haveCollect = data.havecollect;
-    var companyId = data.companyid;
-    var jobId = data.jobid;
-    var content = data.content;
+    let haveCollect = data.havecollect;
+    let companyId = data.companyid;
+    let jobId = data.jobid;
+    let content = data.content;
 
     if(haveCollect === 'true'){
         $('button.my-star-button').text('已收藏');

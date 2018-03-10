@@ -61,9 +61,9 @@ function setData(data) {
         eachDom =   "<div class='ant-col-12 gutter-row'>" +
                         "<div class='ant-card media ant-card-bordered'>"+
                             "<div class='ant-card-body'>" +
-                                "<a class='media-left' style='height:80px;' href='../templates/jobinfo.html?id=" + jobId + "' target='_blank' data-jsx='1812380509'><img style='width: 80px;height:80px;' src='http://localhost:8080"+ iconAddress +"' data-jsx='1812380509'/></a>" +
+                                "<a class='media-left' style='height:80px;' href='/studentcenter/recruitinfo?id=" + jobId + "' target='_blank' data-jsx='1812380509'><img style='width: 80px;height:80px;' src='http://localhost:8080"+ iconAddress +"' data-jsx='1812380509'/></a>" +
                                 "<div class='media-body' data-jsx='1812380509' style='width: 301px;'>" +
-                                "<a href='../public/jobinfo.html?id="+jobId +"' target='_blank' data-jsx='1812380509'>" +
+                                "<a href='/studentcenter/recruitinfo?id="+jobId +"' target='_blank' data-jsx='1812380509'>" +
                                     "<dl data-jsx='1812380509'>" +
                                         "<dt class='line-clamp' data-jsx='1812380509'>" + jobTitle +"</dt>" +
                                         "<dd data-jsx='1812380509'>"+companyName + "</dd>" +
@@ -72,7 +72,7 @@ function setData(data) {
                                     "</dl>"+
                                 "</a>" +
                                 "</div>" +
-                            "<div class='comment' data-jsx='1812380509'><label class='my-pull-left lab' data-jsx='1812380509'>JobBridge说：</label><a href='../public/jobinfo.html?id="+jobId +"' target='_blank' data-jsx='1812380509'>" +
+                            "<div class='comment' data-jsx='1812380509'><label class='my-pull-left lab' data-jsx='1812380509'>JobBridge说：</label><a href='/studentcenter/recruitinfo?id="+jobId +"' target='_blank' data-jsx='1812380509'>" +
                                 "<span class='line-clamp2 cont' title='" + companyDesc +"' data-jsx='1812380509'>" + companyDesc + "</span></a>" +
                             "</div>"+
                             "</div>" +
