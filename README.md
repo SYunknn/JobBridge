@@ -17,6 +17,14 @@
 * 后端: spring boot
 * 数据库：mysql 
 
+## 运行
+1. **创建数据库：** 打开`mysql`命令行, `mysql> create database jobbridge2;`, `mysql> use jobbridge2;`, `mysql> source [path to JobBridge.sql];`
+2. **修改配置文件中的数据库配置：** 打开项目中的`application.yml`文件，然后修改对应的数据库配置；
+3. **运行：** 在`idea`中`open`项目文件夹， 运行即可，`localhost:8080/`
+
+---
+
+
 ## TODO
 * 增加人脉功能（影响力->节点大小， 关系紧密程度->节点与节点之间的线段长度）
 
